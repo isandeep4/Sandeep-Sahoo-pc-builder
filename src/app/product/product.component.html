@@ -14,7 +14,7 @@
                   <label>Add Component</label>
                   <select 
                       [(ngModel)]="selectedProcessor" 
-                      (ngModelChange)="onProcessorChange($event)"
+                      (ngModelChange)="onChange($event)"
                       style="width: 100%;"
                       required>
                       <option value="" selected="yes">---</option>
@@ -35,7 +35,7 @@
                     <label>Add Component</label>
                     <select 
                         [(ngModel)]="selectedMotherboard" 
-                        (ngModelChange)="onMbChange($event)"
+                        (ngModelChange)="onChange($event)"
                         style="width: 100%;"
                         required>
                         <option value="">---</option>
@@ -56,7 +56,7 @@
                     <label>Add Component</label>
                     <select 
                         [(ngModel)]="selectedRam" 
-                        (ngModelChange)="onRamChange($event)"
+                        (ngModelChange)="onChange($event)"
                         style="width: 100%;"
                         required>
                         <option value="">---</option>

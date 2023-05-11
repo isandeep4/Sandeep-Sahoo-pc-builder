@@ -1,7 +1,8 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import { AppState, CartItems } from '../app.interface';
-import { didAllItemsLoaded, addProcessorToCart, addMbToCart, addRamToCart, updateProcessorCartItem, updateMbCartItem, updateRmCartItem, removeCartItem } from '../actions/app.action';
+import { didAllItemsLoaded, removeCartItem, addItemToCart, updateCartItem } from '../actions/app.action';
 import { count } from 'rxjs';
+import { mutableOn } from 'ngrx-etc';
 
 
 
@@ -11,20 +12,12 @@ export const initialState: AppState = {
       motherboardList: [],
       ramList: [],
     },
-    selectedProducts: {
-      processorList: [],
-      motherboardList: [],
-      ramList: [],
-    },
+    selectedProducts: [],
     apiResponse: false,
   };
 
 export const initialCartState: CartItems = {
-  selectedProducts: {
-    processorList: [],
-      motherboardList: [],
-      ramList: [],
-  }
+  selectedProducts: []
 }
 
 export const _PcBuilderReducer = createReducer(
@@ -37,75 +30,21 @@ export const _PcBuilderReducer = createReducer(
         motherboardList: action.statusResponse.motherboardList,
         ramList: action.statusResponse.ramList,
       },
-      selectedProducts: {
-        processorList: [],
-        motherboardList: [],
-        ramList: [],
-      },
+      selectedProducts: [],
       apiResponse: action.apiResponse,
     })),
-    on(addProcessorToCart, (state, action) => ({ 
+    on(addItemToCart, (state,action)=>({
       ...state,
-      selectedProducts: {
-        ...state.selectedProducts,
-        processorList: [action.processor],
-      },
+      selectedProducts:[...state.selectedProducts, action.product]
     })),
-    on(addMbToCart, (state, action) => ({
+    mutableOn(updateCartItem, (state, action) => {
+      state.selectedProducts[action.index].count = action.currentCount,
+      state.selectedProducts[action.index].price = action.currentPrice
+    }),
+    on(removeCartItem, (state, action) => ({
       ...state,
-      selectedProducts: {
-        ...state.selectedProducts,
-        motherboardList: [action.motherboard],
-      },
-    })),
-    
-    on(addRamToCart, (state, action) => ({
-      ...state,
-      selectedProducts: {
-        ...state.selectedProducts,
-        ramList: [action.ram],
-      },
-    })),
-    on(updateProcessorCartItem, (state, action) => ({
-      ...state,
-      selectedProducts: {
-        ...state.selectedProducts,
-        processorList: [
-          {
-            ...state.selectedProducts.processorList[0],
-            count: action.currentCount,
-            price: action.currentPrice,
-          }
-        ]
-      }
-    })),
-    
-    on(updateMbCartItem, (state, action) => ({
-      ...state,
-      selectedProducts: {
-        ...state.selectedProducts,
-        motherboardList: [
-          {
-            ...state.selectedProducts.motherboardList[0],
-            count: action.currentCount,
-            price: action.currentPrice,
-          }
-        ]
-      }
-    })),
-    on(updateRmCartItem, (state, action) => ({
-      ...state,
-      selectedProducts: {
-        ...state.selectedProducts,
-        ramList: [
-          {
-            ...state.selectedProducts.ramList[0],
-            count: action.currentCount,
-            price: action.currentPrice,
-          }
-        ]
-      }
-    })), 
+      selectedProducts: state.selectedProducts.filter(item => item.productName !== action.currentProduct),
+    }))
 )
 
 export const PcBuilderReducer = (

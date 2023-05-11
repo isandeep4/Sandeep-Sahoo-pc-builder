@@ -6,7 +6,7 @@ import { State, Store, select } from '@ngrx/store';
 import { AppState, Products } from 'src/store/app.interface';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
-import { loadAllItems, addProcessorToCart, addMbToCart, addRamToCart } from 'src/store/actions/app.action';
+import { addItemToCart, loadAllItems } from 'src/store/actions/app.action';
 import { selectPcBuilderStatus } from 'src/store/selectors/app.selector';
 
 @Component({
@@ -32,19 +32,9 @@ export class ProductComponent implements OnInit {
       }        
       );   
   }
-  onProcessorChange(val:any){                          // store the selected processor item
-    this.store.dispatch(addProcessorToCart({
-     processor: JSON.parse(val)
-    }));
-  }
-  onMbChange(val:any){                                 // store the selected motherboard item
-    this.store.dispatch(addMbToCart({
-      motherboard: JSON.parse(val)
-    }));
-  }
-  onRamChange(val:any){                                 // store the selected ram item
-    this.store.dispatch(addRamToCart({
-      ram: JSON.parse(val)
+  onChange(val:any){                          // store the selected item
+    this.store.dispatch(addItemToCart({
+     product: JSON.parse(val)
     }));
   }
   goToCart(){

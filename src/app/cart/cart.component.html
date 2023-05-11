@@ -7,14 +7,14 @@
         <h5><a [routerLink]="['/']"><i class="fa fa-home" style="font-size:20px; color: black;"></i></a></h5>
     </div>
 </header>
-<div *ngIf="cartItems[0]" style="padding-left: 10px; font-size: medium;">Items Added in the Cart.</div>
+<div *ngIf="cartItems.length > 0" style="padding-left: 10px; font-size: medium;">Items Added in the Cart.</div>
 <ng-container>
     <table
       mat-table
       [dataSource]="dataSource"
       id="metadata-table"
       class="cart-table"
-      *ngIf="cartItems[0]"
+      *ngIf="cartItems.length > 0"
       >
       <ng-container matColumnDef="Product">
         <th mat-header-cell *matHeaderCellDef>Product</th>
@@ -50,6 +50,6 @@
         <button disabled>Proceed to Checkout</button>
     </div>
 </ng-container>
-<div *ngIf="cartItems[0]=== undefined">No items Added in the Cart. Please select Components from home page</div>
+<div *ngIf="!cartItems.length">No items Added in the Cart. Please select Components from home page</div>
 
 

@@ -2,16 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { selectPcBuilderCartStatus } from 'src/store/selectors/app.selector';
 import { Router } from '@angular/router';
 import { State, Store, select } from '@ngrx/store';
-import { AppState, Products, Processor, Motherboard, Ram } from 'src/store/app.interface';
+import { AppState, Products, Product } from 'src/store/app.interface';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, count, first } from 'rxjs';
-import { updateMbCartItem, updateProcessorCartItem, updateRmCartItem } from 'src/store/actions/app.action';
-
-interface ProductType {
-  productName: string,
-  price: string,
-  count: number,
-}
+import { removeCartItem, updateCartItem } from 'src/store/actions/app.action';
 
 @Component({
   selector: 'app-cart',
@@ -26,90 +20,73 @@ export class CartComponent implements OnInit{
   totalPrice = 0;
   componentData: [];
   displayedColumns: string[] = ['Product', 'ChangeItem', 'Price', 'Delete'];
-  cartItems: ProductType[] = [];
+  cartItems: Product[] = [];
   dataSourceEmpty = [];
   dataSource = new MatTableDataSource(this.cartItems);
   constructor(private router:Router, private store: Store<AppState>) {
   }
-  cartDataSelector$: Observable<Products> = this.store.pipe(select(selectPcBuilderCartStatus));
+  cartDataSelector$: Observable<Product[]> = this.store.pipe(select(selectPcBuilderCartStatus));
   ngOnInit() {
     this.cartDataSelector$          // get the selected items from store
     .pipe(first())
     .subscribe(
       data => {
-        this.cartItems.push(data?.processorList[0]);
-        this.cartItems.push(data?.motherboardList[0]);
-        this.cartItems.push(data?.ramList[0]);
-        this.selectedProcessorPrice = data?.processorList[0]?.price;
-        this.selectedMotherboardPrice = data?.motherboardList[0]?.price;
-        this.selectedRamPrice = data?.ramList[0]?.price;
+        this.cartItems = data;
+        this.dataSource = new MatTableDataSource(this.cartItems);
+        this.selectedProcessorPrice = data[0]?.price;
+        this.selectedMotherboardPrice = data[1]?.price;
+        this.selectedRamPrice = data[2]?.price;
       }        
       );
   }
   
 
   onAddClick(selected: any) {
+    let initialPrice;
     const clickedItemIndex =                                  //finding the index of clicked item
     this.cartItems.findIndex(item => item.productName === selected.productName) 
     const currentItem = { ...this.cartItems[clickedItemIndex] };
     currentItem.count += 1;                                   //increasing the count of that particular item
-    if(clickedItemIndex === 0){                               //updating the price of the processor item if clicked
-      currentItem.price = 
-        (Number(this.selectedProcessorPrice) * currentItem.count).toString();
-        this.store.dispatch(updateProcessorCartItem({
-          currentCount: currentItem.count,
-          currentPrice: currentItem.price,
-        }))
-    } else if(clickedItemIndex === 1){                        //updating the price of the motherboard item if clicked
-      currentItem.price = 
-        (Number(this.selectedMotherboardPrice) * currentItem.count).toString(); 
-        this.store.dispatch(updateMbCartItem({
-          currentCount: currentItem.count,
-          currentPrice: currentItem.price,
-        }))
-    } else {                                                   //updating the price of the ram item if clicked
-      currentItem.price = 
-        (Number(this.selectedRamPrice) * currentItem.count).toString();
-        this.store.dispatch(updateRmCartItem({
-          currentCount: currentItem.count,
-          currentPrice: currentItem.price,
-        }))
+    
+    if(clickedItemIndex === 0){                               //updating the price of the item if clicked
+      initialPrice = this.selectedProcessorPrice;
+    } else if(clickedItemIndex === 1){
+      initialPrice = this.selectedMotherboardPrice;
+    } else if(clickedItemIndex === 2){
+      initialPrice = this.selectedRamPrice;
     }
-
-    this.cartItems[clickedItemIndex] = currentItem;           // update the original cartItem array
+    currentItem.price =
+         (Number(initialPrice) * currentItem.count).toString();
+    this.store.dispatch(updateCartItem({
+      index: clickedItemIndex,
+      currentCount: currentItem.count,
+      currentPrice: currentItem.price,
+    }))
     this.updateDataSource(); 
   };
   
   onRemoveClick(selected: any){
+    let initialPrice;
     const clickedItemIndex = 
       this.cartItems.findIndex(item => item.productName === selected.productName)
     const currentItem = { ...this.cartItems[clickedItemIndex] };
     if(currentItem.count > 1){
       currentItem.count -= 1;
-    if(clickedItemIndex === 0){
-      currentItem.price = 
-        (Number(this.selectedProcessorPrice) * currentItem.count).toString();
-        this.store.dispatch(updateProcessorCartItem({
-          currentCount: currentItem.count,
-          currentPrice: currentItem.price,
-        }))
-    } else if(clickedItemIndex === 1){
-      currentItem.price = 
-        (Number(this.selectedMotherboardPrice) * currentItem.count).toString();
-        this.store.dispatch(updateMbCartItem({
-          currentCount: currentItem.count,
-          currentPrice: currentItem.price,
-        }))
-    } else {
-      currentItem.price = 
-        (Number(this.selectedRamPrice) * currentItem.count).toString();
-        this.store.dispatch(updateRmCartItem({
-          currentCount: currentItem.count,
-          currentPrice: currentItem.price,
-        }))
-    }
-    this.cartItems[clickedItemIndex] = currentItem;
-    this.updateDataSource();
+      if(clickedItemIndex === 0){                               //updating the price of the processor item if clicked
+        initialPrice = this.selectedProcessorPrice;
+      } else if(clickedItemIndex === 1){
+        initialPrice = this.selectedMotherboardPrice;
+      } else if(clickedItemIndex === 2){
+        initialPrice = this.selectedRamPrice;
+      }
+      currentItem.price =
+         (Number(initialPrice) * currentItem.count).toString();
+      this.store.dispatch(updateCartItem({
+        index: clickedItemIndex,
+        currentCount: currentItem.count,
+        currentPrice: currentItem.price,
+      }))
+      this.updateDataSource(); 
     }
   }
   calculateTotal(){
@@ -117,10 +94,20 @@ export class CartComponent implements OnInit{
     return this.totalPrice;
   }
   removeCart(index: number) {
-    this.cartItems.splice(index, 1);
+    const currentItem = { ...this.cartItems[index] };
+    this.store.dispatch(removeCartItem({
+      currentProduct:currentItem.productName,
+    }))
     this.updateDataSource();
   }
   updateDataSource() {
-    this.dataSource.data = this.cartItems;
+    this.cartDataSelector$          // get the selected items from store
+    .pipe(first())
+    .subscribe(
+      data => {
+        this.cartItems = data;
+        this.dataSource.data = this.cartItems;
+      }
+    )
   }
 }

@@ -1,7 +1,12 @@
 export interface AppState {
     productList: Products,
-    selectedProducts: Products,
+    selectedProducts: Product[],
     apiResponse?: boolean,
+}
+export interface Product {
+    productName: string,
+    price: string,
+    count: number,
 }
 export interface Products {
     processorList: Processor[],
@@ -25,5 +30,5 @@ export interface Ram {
     count: number,
 }
 export interface CartItems {
-    selectedProducts: Products,
+    selectedProducts: Product[],
 }
