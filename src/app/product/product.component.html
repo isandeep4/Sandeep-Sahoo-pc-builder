@@ -1,0 +1,85 @@
+<div class="container">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Component</th>
+                <th>Product</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Processor</td>
+                <td>
+                <div class="select-wrap">
+                  <label>Add Component</label>
+                  <select 
+                      [(ngModel)]="selectedProcessor" 
+                      (ngModelChange)="onProcessorChange($event)"
+                      style="width: 100%;"
+                      required>
+                      <option value="" selected="yes">---</option>
+                    <option 
+                      *ngFor="let processor of products.processorList;" 
+                      [value]="processor | json"
+                      >
+                      {{processor.productName}}
+                    </option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            <tr>
+                <td>MotherBoard</td>
+                <td>
+                  <div class="select-wrap">
+                    <label>Add Component</label>
+                    <select 
+                        [(ngModel)]="selectedMotherboard" 
+                        (ngModelChange)="onMbChange($event)"
+                        style="width: 100%;"
+                        required>
+                        <option value="">---</option>
+                      <option *ngFor="let motherboard of products.motherboardList; 
+                        let i = index" 
+                        [value]="motherboard | json">
+                        {{motherboard.productName}}
+                      </option>
+                    </select>
+                  </div>   
+                </td>
+               
+            </tr>
+            <tr>
+                <td>RAM</td>
+                <td> 
+                  <div class="select-wrap">
+                    <label>Add Component</label>
+                    <select 
+                        [(ngModel)]="selectedRam" 
+                        (ngModelChange)="onRamChange($event)"
+                        style="width: 100%;"
+                        required>
+                        <option value="">---</option>
+                      <option *ngFor="let ram of products.ramList; 
+                        let i = index" 
+                        [value]="ram | json">
+                        {{ram.productName}}
+                      </option>
+                    </select> 
+                  </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="float: right">
+    <button 
+      style='font-size:12px' 
+      [disabled]="!(selectedProcessor && selectedMotherboard && selectedRam)"
+      (click)="goToCart()"
+      >
+      Proceed to Cart 
+      <i class='fas fa-angle-double-right'>
+      </i>
+    </button>
+  </div>
+  </div>

@@ -1,0 +1,96 @@
+{
+    "processorList": [
+        {
+          "productName":"AMD Ryzen Threadripper 3990X",
+          "price": "120",
+          "count": 1
+        },
+        {
+            "productName":"AMD Ryzen™ 9 7950X",
+            "price": "150",
+            "count": 1
+        },
+        {
+            "productName":"Intel Core i9-13900KF",
+            "price": "180",
+            "count": 1
+        },
+        {
+            "productName":"AMD Ryzen Threadripper 3970X",
+            "price": "200",
+            "count": 1
+        },
+        {
+            "productName":"Intel Core i9-13900K",
+            "price": "220",
+            "count": 1
+        }       
+        
+    ],
+
+    "motherboardList": [
+        {
+            "productName":"ASUS ROG Zenith II",
+            "price": "120",
+            "count": 1
+        },
+        {
+            "productName": "Asus AM4 TUF Gaming X570-Plus",
+            "price": "150",
+            "count": 1
+        },
+        {
+            "productName": "GIGABYTE X570SI AORUS PRO AX",
+            "price": "180",
+            "count": 1
+        },
+        {
+            "productName": "GIGABYTE X570S AORUS Master",
+            "price": "200",
+            "count": 1
+        },
+        {
+            "productName": "Asus Prime X570-Pro Ryzen 3",
+            "price": "220",
+            "count": 1
+        },
+        {
+            "productName": "ASUS ROG Strix X570-E",
+            "price": "250",
+            "count": 1
+        }        
+    ],
+
+    "ramList": [
+        {
+            "productName": "G.Skill Trident Z5 RGB Series 32GB",
+            "price": "50",
+            "count": 1
+        },
+        {
+            "productName": "Kingston Technology Fury Renegade",
+            "price": "80",
+            "count": 1
+        },
+        {
+            "productName": "PNY XLR8 Gaming MAKO 32GB",
+            "price": "100",
+            "count": 1
+        },
+        {
+            "productName":  "TEAMGROUP T-Force Delta RGB DDR5",
+            "price": "120",
+            "count": 1
+        },
+        {
+            "productName":  "XPG Lancer DDR5 RGB",
+            "price": "150",
+            "count": 1
+        },
+        {
+            "productName":  "Corsair DOMINATOR PLATINUM RGB",
+            "price": "170",
+            "count": 1
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+# run npm install to download node modules
+# run ng serve to run the application that will host in localhost:4200 local server
+# The home page will show the home/build page where three components such as processor, motherboard and ram will be shown
+# User can select different items from the three component based on the dropdown list
+# The 'proceed to cart' button will be enabled once the three mandatory component will be selected
+# once the user click the proceed to cart button, it will navigate to cart page
+# The cart page will have the all the items selected by the user from the build page with price, add/remove and delete column
+# User can add items any number of times by clicking + and - button
+# User also can delete the entire row by clicking the delete button
+# In the cart page, Total price show the total amount calculated based the item selected.
